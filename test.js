@@ -1,35 +1,46 @@
-function getMatrixElementsSum(matrix) {
-  const height = matrix.length;
-  const width = matrix[0].length;
-  let rows = [];
-  let columns = [];
-  for (let c = 0; c < width; c++) {
-    for (let r = 0; r < height; r++) {
-      rows.push(matrix[r][c]);
+function minesweeper(matrix) {
+  const cols = matrix[0].length
+  const rows = matrix.length
+  const arr = [];
+  let row = [];
+  let eVal = 0;
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      if (i > 0) {
+        eVal = !!matrix[i - 1][j] ? 1 : 0; // top
+      }
+      if (i > 0 && j + 1 < cols) {
+        eVal += !!matrix[i - 1][j + 1] ? 1 : 0; // top right
+      }
+      if (j + 1 < cols) {
+        eVal += !!matrix[i][j + 1] ? 1 : 0; // right
+      }
+      if (i + 1 < rows && j + 1 < cols) {
+        eVal += !!matrix[i + 1][j + 1] ? 1 : 0; // right under
+      }
+      if (i + 1 < rows) {
+        eVal += !!matrix[i + 1][j] ? 1 : 0; // under
+      }
+      if (i + 1 < rows && j > 0) {
+        eVal += !!matrix[i + 1][j - 1] ? 1 : 0; // left under
+      }
+      if (j > 0) {
+        eVal += !!matrix[i][j - 1] ? 1 : 0; // left
+      }
+      if (i > 0 && j > 0) {
+        eVal += !!matrix[i - 1][j - 1] ? 1 : 0; // left top
+      }
+      row.push(eVal);
+      eVal = 0;
+      // console.log(`${matrix[i][j]} - ${eVal}`);
     }
-    columns.push(rows);
-    rows = [];
+    arr.push(row);
+    row = [];
   }
-  const result = columns.reduce((acc, val) => {
-    return acc +
-      val.reduce((subAcc, subVal, idx, arr) => {
-        if (idx === 0) {
-          subAcc += subVal;
-        } else if (arr[idx - 1] !== 0) {
-          subAcc += subVal;
-        }
-        return subAcc;
-      }, 0);
-  }, 0);
-  return result;
-  // console.log(`${rows} - ${columns}`);
-
-  // return matrix.flat().reduce((acc, val) => acc + val, 0);
+  return arr;
 }
-
 matrix = [
-  [0, 1, 1, 2],
-  [0, 5, 0, 0],
-  [2, 0, 3, 3],
+  [false, false, false],
+  [false, false, false],
 ];
-console.log(getMatrixElementsSum(matrix));
+console.log(minesweeper(matrix));
