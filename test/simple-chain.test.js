@@ -31,7 +31,6 @@ describe('Make chain!', () => {
                 () => chainMaker.addLink(1).addLink(2).addLink(3).removeLink(-2),
                 () => chainMaker.addLink(1).addLink(2).addLink(3).removeLink(4)
             ], 'You can\'t remove incorrect link!');
-
             assert.strictEqual(res.every($ => $ === CORRECT_RESULT_MSG), true);
         });
     });

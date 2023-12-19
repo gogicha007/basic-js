@@ -10,6 +10,7 @@ const checkForThrowingErrors = function (testsFuncs, expectedErrMsg) {
             if (err._specialProp === SPECIAL_PROP_VALUE) {
                 this.skip();
             } else if (err.message === expectedErrMsg) {
+                console.log(err.message)
                 return CORRECT_RESULT_MSG;
             }
         }
