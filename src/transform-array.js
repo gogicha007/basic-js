@@ -15,15 +15,19 @@ const { NotImplementedError } = require("../extensions/index.js");
  */
 function transform(arr) {
   if (Array.isArray(arr)) {
+    let tmpArr = []
     const result = arr.flatMap((val, idx, arr) => {
-      if (arr[idx + 1] === "--discard-prev") return [];
+      tmpArr = []
+      tmpArr.push(val)
       if (arr[idx - 1] === "--discard-next") return [];
-      if (arr[idx - 1] === "--double-next") return [val, val];
-      if (arr[idx + 1] === "--double-prev") return [val, val];
+      if (arr[idx - 1] === "--double-next") tmpArr.push(val);
+      if (arr[idx + 1] === "--discard-prev") tmpArr.pop();
+      if (arr[idx + 1] === "--double-prev") tmpArr.push(val);
 
-      if (val.toString().startsWith("--d")) return [];
+      if (val.toString().startsWith("--discard")) return [];
+      if (val.toString().startsWith("--double")) return [];
 
-      return val;
+      return tmpArr;
     });
     return result;
   } else {

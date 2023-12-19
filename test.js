@@ -1,21 +1,34 @@
-function transform(arr) {
-  if (Array.isArray(arr)) {
-    const result = arr.flatMap((val, idx, arr) => {
-      if (arr[idx + 1] === "--discard-prev") return [];
-      if (arr[idx - 1] === "--discard-next") return [];
-      if (arr[idx + 1] === "--double-prev") return [val, val];
-      if (arr[idx - 1] === "--double-next") return [val, val];
+class VigenereCipheringMachine {
+  constructor(value = true) {
+    this.option = value;
+    this.alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  }
+  encrypt(...args) {
+    if (this.checkArguments(args)) {
+      const key = args[1]
+        .repeat(Math.ceil(args[0].length / args[1].length))
+        .toUpperCase();
+      const result = Array.from(args[0].toUpperCase()).reduce((acc, val, idx) => {
+        console.log(val);
+        console.log(this.alpha.indexOf(val));
+      }, []);
+    } else {
+      throw Error("Incorrect arguments!");
+    }
+  }
+  decrypt(...args) {
+    if (this.checkArguments(args)) {
+      console.log("its ok");
+    } else {
+      throw Error("Incorrect arguments!");
+    }
+  }
 
-      if (val.toString().startsWith("--d")) return [];
-
-      return val;
-    });
-    return result;
-  } else {
-    throw new Error("'arr' parameter must be an instance of the Array!");
+  checkArguments(args) {
+    return args.length === 2 && args.every((val) => typeof val === "string");
   }
 }
 
-console.log(
-  transform([1, 2, 3, '--double-next', 1337, '--discard-prev', 4, 5])
-);
+const machine = new VigenereCipheringMachine();
+
+console.log(machine.encrypt("undefined", "lala"));
