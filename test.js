@@ -1,28 +1,33 @@
 function getSeason(date) {
   if (!arguments[0]) return "Unable to determine the time of year!";
   if (date instanceof Date) {
-    const seasons = new Map([
-      [[12, 1, 2], "winter"],
-      [[3, 4, 5], "spring"],
-      [[6, 7, 8], "summer"],
-      [[9, 10, 11], "autumn"],
-    ]);
 
-    const result = (seasons, month) => {
-      for (const season of seasons.entries()) {
-        if (season[0].includes(month)) return season[1];
-      }
+
+    const seasons = {
+      winter : ["Dec","Jan","Feb"],
+      spring : ["Mar","Apr","May"],
+      summer : ["Jun","Jul","Aug"],
+      autumn : ["Sep","Oct","Nov"],
     };
-
-    // console.log(result(seasons, date.getMonth()));
-
-    return result(seasons, date.getMonth());
+    const month = [...date.toDateString().split(' ')]
+    console.log(month)
+    const result = Object.entries(seasons).filter((val) => val[1].includes(month[1]))
+    return result[0][0];
   } else {
     throw Error("Invalid date!");
   }
 }
 
-date = new Date(2019, 11, 22, 23, 45, 11, 500)
-console.log(date)
-console.log(date.getMonth())
-console.log(getSeason(date));
+const fakeDate = {
+  toString() {
+      return Date.prototype.toString.call(new Date());
+  },
+  [Symbol.toStringTag]: 'Date'
+};
+
+Object.setPrototypeOf(fakeDate, Object.getPrototypeOf(new Date()));
+date = new Date(1900, 0, 22, 23, 45, 11, 500),
+    
+// console.log(date)
+// console.log(date.getMonth())
+console.log(getSeason(fakeDate));
