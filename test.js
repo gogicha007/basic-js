@@ -1,77 +1,28 @@
-class VigenereCipheringMachine {
-  constructor(value = true) {
-    this.option = value;
-    this.alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  }
-  encrypt(...args) {
-    if (this.checkArguments(args)) {
-      const key = args[1]
-        .repeat(Math.ceil(args[0].replaceAll(" ", "").length / args[1].length))
-        .toUpperCase()
-        .slice(0, args[0].replaceAll(" ", "").length);
-      const keyArr = this.option ? [...key] : [...key].reverse();
-      const messageArr = this.option
-        ? [...args[0].toUpperCase()]
-        : [...args[0].toUpperCase()].reverse();
-      messageArr.forEach((val, idx) => {
-        if (val === " ") keyArr.splice(idx, 0, " ");
-      });
-      let keyIdx, valIdx, cyphIdx, cyphVal;
-      const result = messageArr.reduce((acc, val, idx) => {
-        if (this.alpha.indexOf(val) >= 0) {
-          valIdx = this.alpha.indexOf(val);
-          keyIdx = this.alpha.indexOf(keyArr[idx]);
-          cyphIdx = (valIdx + keyIdx) % 26;
-          cyphVal = this.alpha[cyphIdx];
-          acc.push(cyphVal);
-        } else {
-          acc.push(val);
-        }
-        return acc;
-      }, []);
-      return result.join("");
-    } else {
-      throw Error("Incorrect arguments!");
-    }
-  }
-  decrypt(...args) {
-    if (this.checkArguments(args)) {
-      const key = args[1]
-        .repeat(Math.ceil(args[0].replaceAll(" ", "").length / args[1].length))
-        .toUpperCase()
-        .slice(0, args[0].replaceAll(" ", "").length);
-      const keyArr = this.option ? [...key] : [...key].reverse();
-      const messageArr = this.option
-        ? [...args[0].toUpperCase()]
-        : [...args[0].toUpperCase()].reverse();
-      messageArr.forEach((val, idx) => {
-        if (val === " ") keyArr.splice(idx, 0, " ");
-      });
-      let keyIdx, valIdx, cyphIdx, cyphVal;
-      const result = messageArr.reduce((acc, val, idx) => {
-        if (this.alpha.indexOf(val) >= 0) {
-          valIdx = this.alpha.indexOf(val);
-          keyIdx = this.alpha.indexOf(keyArr[idx]);
-          cyphIdx = (26 + (valIdx - keyIdx)) % 26;
-          cyphVal = this.alpha[cyphIdx];
-          acc.push(cyphVal);
-        } else {
-          acc.push(val);
-        }
-        return acc;
-      }, []);
-      return result.join("");
-    } else {
-      throw Error("Incorrect arguments!");
-    }
-  }
+function getSeason(date) {
+  if (!arguments[0]) return "Unable to determine the time of year!";
+  if (date instanceof Date) {
+    const seasons = new Map([
+      [[12, 1, 2], "winter"],
+      [[3, 4, 5], "spring"],
+      [[6, 7, 8], "summer"],
+      [[9, 10, 11], "autumn"],
+    ]);
 
-  checkArguments(args) {
-    return args.length === 2 && args.every((val) => typeof val === "string");
+    const result = (seasons, month) => {
+      for (const season of seasons.entries()) {
+        if (season[0].includes(month)) return season[1];
+      }
+    };
+
+    // console.log(result(seasons, date.getMonth()));
+
+    return result(seasons, date.getMonth());
+  } else {
+    throw Error("Invalid date!");
   }
 }
 
-const machine = new VigenereCipheringMachine(false);
-
-console.log(machine.encrypt("attack at dawn!", "alphonse"));
-// console.log(machine.decrypt("HSVD AJAL ^^", "behappy"));
+date = new Date(2019, 11, 22, 23, 45, 11, 500)
+console.log(date)
+console.log(date.getMonth())
+console.log(getSeason(date));
